@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:my_todo_list/models/task.dart';
+import 'package:my_todo_list/providers/task/task_provider.dart';
 import 'package:my_todo_list/utils/app_alerts.dart';
 import 'package:my_todo_list/utils/extensions.dart';
 import 'package:my_todo_list/widgets/common_container.dart';
+import 'package:my_todo_list/widgets/task_details.dart';
 import 'package:my_todo_list/widgets/task_tile.dart';
 
 class DisplayListOfTasks extends ConsumerWidget {
@@ -34,49 +36,52 @@ class DisplayListOfTasks extends ConsumerWidget {
                 style: context.textTheme.headlineSmall,
               ),
             )
-          : ListView.separated(
-              shrinkWrap: true,
-              itemCount: tasks.length,
-              padding: EdgeInsets.zero,
-              itemBuilder: (ctx, index) {
-                final task = tasks[index];
+          : Container(
+              padding: const EdgeInsets.all(15),
+              child: ListView.separated(
+                shrinkWrap: true,
+                itemCount: tasks.length,
+                padding: EdgeInsets.zero,
+                itemBuilder: (ctx, index) {
+                  final task = tasks[index];
 
-                return InkWell(
-                  onLongPress: () async {
-                    await AppAlerts.showAlertDeleteDialog(
-                      context: context,
-                      ref: ref,
-                      task: task,
-                    );
-                  },
-                  onTap: () async {
-                    // await showModalBottomSheet(
-                    //   context: context,
-                    //   builder: (ctx) {
-                    //     return TaskDetails(task: task);
-                    //   },
-                    // );
-                  },
-                  child: TaskTile(
-                    task: task,
-                    onCompleted: (value) async {
-                      // await ref
-                      //     .read(tasksProvider.notifier)
-                      //     .updateTask(task)
-                      //     .then((value) {
-                      //   AppAlerts.displaySnackbar(
-                      //     context,
-                      //     task.isCompleted
-                      //         ? 'Task incompleted'
-                      //         : 'Task completed',
-                      //   );
-                      // });
+                  return InkWell(
+                    onLongPress: () async {
+                      await AppAlerts.showAlertDeleteDialog(
+                        context: context,
+                        ref: ref,
+                        task: task,
+                      );
                     },
-                  ),
-                );
-              },
-              separatorBuilder: (context, index) => const Divider(
-                thickness: 1.5,
+                    onTap: () async {
+                      await showModalBottomSheet(
+                        context: context,
+                        builder: (ctx) {
+                          return TaskDetails(task: task);
+                        },
+                      );
+                    },
+                    child: TaskTile(
+                      task: task,
+                      onCompleted: (value) async {
+                        await ref
+                            .read(taskProvider.notifier)
+                            .updateTask(task)
+                            .then((value) {
+                          AppAlerts.displaySnackbar(
+                            context,
+                            task.isCompleted
+                                ? 'Task incompleted'
+                                : 'Task completed',
+                          );
+                        });
+                      },
+                    ),
+                  );
+                },
+                separatorBuilder: (context, index) => const Divider(
+                  thickness: 1.5,
+                ),
               ),
             ),
     );

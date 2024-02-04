@@ -12,6 +12,7 @@ class App extends ConsumerWidget {
 
     return MaterialApp.router(
       debugShowCheckedModeBanner: false,
+      title: 'My Todo List',
       theme: AppTheme.light,
       routerConfig: route,
     );

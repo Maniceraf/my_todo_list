@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:my_todo_list/models/task.dart';
+import 'package:my_todo_list/providers/task/task_provider.dart';
 import 'package:my_todo_list/utils/extensions.dart';
 
 @immutable
@@ -31,15 +32,15 @@ class AppAlerts {
     );
     Widget deleteButton = TextButton(
       onPressed: () async {
-        // await ref.read(tasksProvider.notifier).deleteTask(task).then(
-        //   (value) {
-        //     displaySnackbar(
-        //       context,
-        //       'Task deleted successfully',
-        //     );
-        //     context.pop();
-        //   },
-        // );
+        await ref.read(taskProvider.notifier).deleteTask(task).then(
+          (value) {
+            displaySnackbar(
+              context,
+              'Task deleted successfully',
+            );
+            context.pop();
+          },
+        );
       },
       child: const Text('YES'),
     );

@@ -51,6 +51,7 @@ class _CreateTaskScreenState extends ConsumerState<CreateTaskScreen> {
         title: const DisplayWhiteText(
           text: 'Add New Task',
         ),
+        centerTitle: true,
       ),
       body: SafeArea(
         child: SingleChildScrollView(
@@ -64,18 +65,18 @@ class _CreateTaskScreenState extends ConsumerState<CreateTaskScreen> {
                 title: 'Task Title',
                 controller: _titleController,
               ),
-              const Gap(30),
+              const Gap(20),
               const CategoriesSelection(),
-              const Gap(30),
+              const Gap(20),
               const SelectDateTime(),
-              const Gap(30),
+              const Gap(20),
               CommonTextField(
                 hintText: 'Notes',
                 title: 'Notes',
                 maxLines: 6,
                 controller: _noteController,
               ),
-              const Gap(30),
+              const Gap(20),
               ElevatedButton(
                 onPressed: _createTask,
                 child: const Padding(
@@ -85,7 +86,7 @@ class _CreateTaskScreenState extends ConsumerState<CreateTaskScreen> {
                   ),
                 ),
               ),
-              const Gap(30),
+              const Gap(20),
             ],
           ),
         ),
