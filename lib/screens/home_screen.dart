@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:my_todo_list/config/routes/routes_provider.dart';
+import 'package:my_todo_list/config/theme/theme_provider.dart';
 import 'package:my_todo_list/models/task.dart';
 import 'package:my_todo_list/providers/date_provider.dart';
 import 'package:my_todo_list/providers/task/task_provider.dart';
@@ -32,6 +33,12 @@ class HomeScreen extends ConsumerWidget {
     return Scaffold(
       body: Stack(
         children: [
+          const Positioned(
+            top: 100,
+            right: 20,
+            left: 0,
+            child: SwitchExample(),
+          ),
           AppBackground(
             headerHeight: deviceSize.height * 0.3,
             header: SingleChildScrollView(
@@ -62,6 +69,7 @@ class HomeScreen extends ConsumerWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
+                    const Gap(20),
                     DisplayListOfTasks(
                       tasks: inCompletedTasks,
                     ),
@@ -125,5 +133,44 @@ class HomeScreen extends ConsumerWidget {
       }
     }
     return filteredTask;
+  }
+}
+
+class SwitchExample extends ConsumerWidget {
+  const SwitchExample({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final MaterialStateProperty<Color?> trackColor =
+        MaterialStateProperty.resolveWith<Color?>(
+      (Set<MaterialState> states) {
+        if (states.contains(MaterialState.selected)) {
+          return Colors.amber;
+        }
+        return null;
+      },
+    );
+    final MaterialStateProperty<Color?> overlayColor =
+        MaterialStateProperty.resolveWith<Color?>(
+      (Set<MaterialState> states) {
+        if (states.contains(MaterialState.selected)) {
+          return Colors.amber.withOpacity(0.54);
+        }
+        if (states.contains(MaterialState.disabled)) {
+          return Colors.grey.shade400;
+        }
+        return null;
+      },
+    );
+
+    return Switch(
+      value: ref.watch(themeProvider),
+      overlayColor: overlayColor,
+      trackColor: trackColor,
+      thumbColor: const MaterialStatePropertyAll<Color>(Colors.black),
+      onChanged: (bool value) {
+        ref.read(themeProvider.notifier).state = !ref.watch(themeProvider);
+      },
+    );
   }
 }
